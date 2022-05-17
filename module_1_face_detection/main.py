@@ -2,6 +2,7 @@ import cv2
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
+smile_cascade = cv2.CascadeClassifier('haarcascade_smile.xml')
 
 def detect(gray, frame):
     faces = face_cascade.detectMultiScale(image=gray, scaleFactor=1.3, minNeighbors=5)
@@ -13,7 +14,12 @@ def detect(gray, frame):
         for (eye_x, eye_y, eye_w, eye_h) in eyes:
             cv2.rectangle(img=roi_color, pt1=(eye_x, eye_y), pt2=(eye_x+eye_w, eye_y+eye_h),
                           color=(0, 255, 0), thickness=2)
+        smiles = smile_cascade.detectMultiScale(image=roi_gray, scaleFactor=1.5, minNeighbors=8)
+        for (smile_x, smile_y, smile_w, smile_h) in smiles:
+            cv2.rectangle(img=roi_color, pt1=(smile_x, smile_y), pt2=(smile_x+smile_w, smile_y+smile_h),
+                          color=(255, 0, 0), thickness=2)
     return frame
+
 
 video_capture = cv2.VideoCapture(0)
 while True:
